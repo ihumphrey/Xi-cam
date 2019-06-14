@@ -145,6 +145,10 @@ html_theme_options = {
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
+# Mock modules that cause sphinx builds via buildthedocs to fail with a
+# ModuleNotFoundError when trying to import modules
+autodoc_mock_imports = ['PySide']
+
 
 class SimpleClassDocumenter(autodoc.ClassDocumenter):
     objtype = "simpleclass"
