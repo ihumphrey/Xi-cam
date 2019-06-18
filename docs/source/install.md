@@ -53,12 +53,20 @@ Create a virtual environment for installing the Xi-cam components and
 dependencies. You will then want to activate the virtual environment you
 created so that any packages you install with python's package manager, **pip**,
 will be installed into that active virtual environment. In the commands below,
-replace `<directory>` with the directory that you want to install your virtual
-environment in: 
+create a virtual environment called **venv** and activate it:
+
+### macOS
 
 ```
-python3 -m venv <directory>
-source <directory>/bin/actviate
+python3 -m venv venv
+source venv/bin/actviate
+```
+
+### Windows
+
+```
+python -m venv venv
+venv/Scripts/activate
 ```
 
 ## Install Xi-cam and Core Dependencies
@@ -106,6 +114,13 @@ To ensure everything is installed correctly, you can run Xi-cam. In the
 ```
 xicam
 ```
+
+<!--
+NOTES
+-----
+Anaconda to keep PATH active (opposed to having to activate every time)
+
+-->
 
 <!--
 * test these instructions on windows
