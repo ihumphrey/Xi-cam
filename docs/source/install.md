@@ -93,13 +93,13 @@ cd Xi-cam.core
 pip install -e .
 cd ..
 
-git clone https://github.com/lbl-camera/Xi-cam.gui
-cd Xi-cam.gui
+git clone https://github.com/lbl-camera/Xi-cam.plugins
+cd Xi-cam.plugins
 pip install -e .
 cd ..
 
-git clone https://github.com/lbl-camera/Xi-cam.plugins
-cd Xi-cam.plugins
+git clone https://github.com/lbl-camera/Xi-cam.gui
+cd Xi-cam.gui
 pip install -e .
 cd ..
 
