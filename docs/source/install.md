@@ -66,7 +66,7 @@ source venv/bin/actviate
 
 ```
 python -m venv venv
-venv/Scripts/activate
+venv\Scripts\activate
 ```
 
 ## Install Xi-cam and Core Dependencies
@@ -85,7 +85,8 @@ Xi-cam.gui, Xi-cam.plugins, and Xi-cam.
 Then, install these into your active virtual environment via pip.
 Use the **-e** option to create an editable installation. This allows you to
 modify any code in these repos and see the changes without having to run
-`pip install` again.
+`pip install` again. (If on Windows, run the following commands using
+**Git Bash**.)
 
 ```
 git clone https://github.com/lbl-camera/Xi-cam.core
