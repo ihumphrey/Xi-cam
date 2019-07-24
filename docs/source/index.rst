@@ -13,6 +13,7 @@ Welcome to Xi-cam's documentation!
    intro
    ezPlugin
    processingPlugin
+   guiPlugin
    pluginDev
 
 
