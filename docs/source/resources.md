@@ -8,6 +8,14 @@ Example of a simple single-stage GUIPlugin.
 * [Xi-cam NCEM Plugin](https://github.com/synchrotrons/Xi-cam.NCEM) -
 Example of a multi-stage GUIPlugin with more functionality.
 
+## Git
+
+* [Try GitHub](https://try.github.io/) -
+Landing page for some introductions and resources about git and GitHub.
+
+* [Git Handbook](https://guides.github.com/introduction/git-handbook/) -
+An introduction to git and GitHub.
+
 ## Python
 
 ```TODO -- replace this first one with a different introductory python```
