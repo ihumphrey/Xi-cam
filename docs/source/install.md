@@ -9,9 +9,8 @@ development.
 You will need to ensure that you have both **git** and **python3** installed on
 your system for Xi-cam development.
 
-If you do not have familiarity with git, the [Try GitHub](https://try.github.io/) pages have some tutorials and
-documentation about version control and git. The 
-[Git Handbook](https://guides.github.com/introduction/git-handbook/) page is a great place to start.
+If you do not have familiarity with git, see the [Resources](resources.md) page for more information
+about git and GitHub.
 
 ### macOS
 
