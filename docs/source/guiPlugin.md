@@ -5,7 +5,17 @@ By deriving a GUIPlugin, you can define a custom plugin in Xi-cam that can
 be used to load, process, and analyze data.
 
 See the
-[Resources](#resources) section for more information about Qt and QtPy.
+[Resources](resources.md) page for more information about Qt and QtPy.
+
+## Prerequisites
+
+If you have not installed Xi-cam for development, follow the instructions on the 
+[Installing Xi-cam](install.md) page.
+
+Also, *make sure that your xicam virtual environment (venv) is activated*. 
+
+For Windows, commands will be run with
+Git Bash. For macOS and Linux, commands will be run on the terminal.
 
 ## Core Concepts
 
@@ -19,11 +29,12 @@ Each stage represents a collection of widgets used to perform some task.
 A GUIPlugin must have at least one stage.
 
 Stages are defined as as an ordered dictionary,
-where each key represents a stage and each associated value
-is a GUILayout that defines the organization of widgets in that stage.
+where each key represents a stage's name and each associated value
+is a [GUILayout](#gui-layouts) that defines the organization of widgets for that stage.
+The key will be used at the stage's display name in Xi-cam.
 
 As an example, we could have a Demo GUIPlugin that has the stages
-stage1, stage2, and stage3. To set these stages, we would set the
+X and Y. To set these stages, we would set the
 GUIPlugin's stages property:
 
 ```python
@@ -32,21 +43,23 @@ self.stages = {
     'Y': GUILayout(yWidget),}
 ```
 
+This creates two stages, X and Y, in your GUIPlugin.
 When clicking the Demo plugin on the top of the main window, you would see:
 
 > Demo | X | Y | &uarr;
 
-For example, if we
+[//]: <> (For example, if we
 have a GUIPlugin called MovieEnhance, we could break apart its user work flow
 into separate but related components. MovieEnhance could be broken down into
 a user workflow where the user can view the raw images and select a
 region-of-interest, "enhance" the region-of-interest, then crop for a final
 enhanced product image. These steps can be represented by stages: Examine,
-Enhance, Crop.
+Enhance, Crop.)
 
 ### GUI Layouts
-The main window in Xi-cam is organized in a 3 x 3 grid. 
+
 The GUILayout class represents a layout of widgets to use in a GUIPlugin stage.
+The main window in Xi-cam is organized in a 3 x 3 grid. 
 These cells in the grid are named according to their positions in the grid: 
 center, top, bottom, left, lefttop, leftbottom, right, righttop, rightbottom. 
 
@@ -60,13 +73,22 @@ it is not recommended as it will replace those main window widgets.
 
 ### Data Models
 
+### GUIPlugin header methods
+
+*If you have a custom file format or a file format is not already handled by Xi-cam's DataHandlerPlugins, you will need to
+implement your own. Please see [DataHandlerPlugin](TODO -- broken link) for more detailed information about writing
+your own DataHandlerPlugin.*
+
+```TODO -- is there a way to easily see registered data handlers? (.hdf, .jpg, .bin, etc. are currently loadable)```
+
 The GUIPlugin class provides an interface for storing and accessing data within
-the GUIPlugin. The interface methods are appendHeader, currentheader, and headers.
+your derived GUIPlugin. The interface methods are appendHeader, currentheader, and headers.
 
-**appendHeader** is used to add data to the GUIPlugin. This data is added to an
-internal model so it can be shared across stages of the GUIPlugin.
+```TODO -- hook in GUIPlugin documentation here...```
 
-**currentheader** is used to retrieve the "current" data.
+**appendHeader** is intended to be used to internalize data in your derived GUIPlugin.
+
+**currentheader** is intended to be used to retrieve the current (active, focused, etc.) internalized data.
 
 **headers** is used to get a list of all of the data items in the data model.
 
@@ -97,8 +119,8 @@ Here are the prompts with descriptions and values that we will use:
 
 prompt | description | our value
 --- | --- | ---
-package_name     | name of the python package to create that contains the plugin code | mydemo
-display_name     | name that displays in Xi-cam for this plugin                       | My Demo Plugin
+package_name     | name of the plugin package (also the name displayed in Xi-cam)     | mydemo
+display_name     | name of plugin (shows up in docs and README)                       | My Demo Plugin
 plugin_version   | current plugin version number                                      |
 plugin_file_name | file to put the generated plugin code into                         |
 author_name      | name of the plugin's author                                        | \<Your Name\>
@@ -106,18 +128,12 @@ author_email     | author's email                                               
 author_url       | url for the author/plugin (this is used as the plugin repo url)    | \<Your Plugin Repo\>
 description      | description of the plugin                                          | Demonstrates a simple GUIPlugin
 keywords         | keywords to tag the plugin with                                    |
-dependencies     | packages the plugin depends on                                     | numpy
+dependencies     | packages the plugin depends on                                     | 
 plugin_code      | additional code to put in the plugin implementation file           |
 stages_code      | python dictionary to set the plugin's stages to                    |
 yapsy_ext        | file extension of the plugin marker file                           |
 
 This generates the following in your current directory:
-
-<details>
-  <summary>a</summary>
-    <details>
-  <p>test</p>
-</details>
 
 ```
 Xi-cam.plugins.mydemo/
@@ -138,12 +154,15 @@ Xi-cam.plugins.mydemo/
       mydemo.yapsy-plugin
 ```
 
-#### Set up Version Control
+#### Setting up VCS (Version Control System)
+
+You will need to initialize the directory cookiecutter created, `Xi-cam.plugins.mydemo`, 
+as a repository:
 
 ```
-cd 
+cd Xi-cam.plugins.mydemo
+git init .
 ```
-
 
 ### Creating the Plugin and the Plugin Marker File without cookiecutter
 
@@ -197,35 +216,22 @@ class MovieEnhancePlugin(GUIPlugin):
         
         super(MovieEnhancePlugin, self).__init__(self)
 ```
+)
 
 ### Installing the plugin
 
-<strong>TODO</strong>
+After creating the plugin, we need to tell Xi-cam that it is available to use. One way to do this is to create an
+editable pip install. Make sure you are in your plugin's directory (Xi-cam.plugins.mydemo), then run:
 
 ```
 pip install -e .
 ```
-This creates an editable installation. Th
 
-## Resources
+This will allow Xi-cam to see your plugin and load it.
 
-Qt is a C++ library for developing graphical user interfaces. 
-PySide2 and PyQt5 are two different python bindings to the C++ Qt library. 
-QtPy is a wrapper that allows for writing python Qt code with either PySide2 or PyQt5 installed.
+### Verifying
 
-Xi-cam uses [QtPy](https://pypi.org/project/QtPy/) to interact with different Python bindings to Qt.
-QtPy allows you *"to write your code as if you were using PySide2 but import Qt modules from qtpy instead of PySide2 
-(or PyQt5)"*. 
-The references below show PySide2 examples and documentation; when writing a Xi-cam
-plugin, make sure to use the `qtpy` modules when importing.
+Run xicam to verify that your plugin loads properly.
+At the top-right of the Xi-cam main window, you should see *mydemo*.
+When you click it, you should see the text *Stage 1* in the middle of the main window.
 
-* [PyQt5 GUI Tutorial](https://build-system.fman.io/pyqt5-tutorial) - Introductory tutorial for learning the basic
-concepts of Qt. *Note: this tutorial is written for PyQt5, remember to import from `qtpy` instead of `PyQt5` or 
-`PySide2` when writing code for Xi-cam.*
-
-* [PySide2 Documentation](https://pyside.github.io/docs/pyside/) - Documentation for PySide2. Since the QtPy API
-resembles PySide2, this documentation is helpful for looking up python Qt modules and classes that you may use.
-
-* [Xi-cam Log Plugin](https://github.com/synchrotrons/Xi-cam.plugins.Log) - Example of a simple GUIPlugin in Xi-cam.
-
-* [Xi-cam NCEM Plugin](https://github.com/synchrotrons/Xi-cam.NCEM) - Example of a multi-stage GUIPlugin in Xi-cam.
