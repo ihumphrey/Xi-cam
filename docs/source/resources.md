@@ -16,6 +16,16 @@ Landing page for some introductions and resources about git and GitHub.
 * [Git Handbook](https://guides.github.com/introduction/git-handbook/) -
 An introduction to git and GitHub.
 
+## NSLS-II
+
+Useful resources about NSLS-II software that Xi-cam uses.
+
+* [Event Model](https://nsls-ii.github.io/architecture-overview.html) -
+Describes an event-based data model.
+
+* [Bluesky Documents](https://nsls-ii.github.io/bluesky/documents.html) -
+Describes what a bluesky document is. 
+
 ## Python
 
 Here are a few resources regarding object-oriented programming with Python3. Feel free to
