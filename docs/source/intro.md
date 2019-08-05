@@ -1,6 +1,7 @@
-# About this Documentation
+# Xi-cam
 
-```TODO```
+Xi-cam is a graphical user interface (GUI) application that facilitates synchrotron data processing
+and analysis. 
 
 ## Where to Start
 
