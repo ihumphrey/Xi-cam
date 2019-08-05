@@ -18,12 +18,14 @@ An introduction to git and GitHub.
 
 ## Python
 
-```TODO -- replace this first one with a different introductory python```
+Here are a few resources regarding object-oriented programming with Python3. Feel free to
+look through these or even through resources you find on your own if you are interested.
+
 * [Python OOP Introduction and Tutorial](https://realpython.com/python3-object-oriented-programming/) -
-A starting point for learning about object-oriented programming and how to write object-oriented code in Python3.
 
 * [Presentation on OOP in Python](https://www.cs.colorado.edu/~kena/classes/5448/f12/presentation-materials/li.pdf) -
 
+* [Python OOP](https://www.python-course.eu/python3_object_oriented_programming.php)
 
 ## Qt
 
