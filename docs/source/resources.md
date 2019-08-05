@@ -57,3 +57,7 @@ concepts of Qt. *Note: this tutorial is written for PyQt5, remember to import fr
 * [PySide2 Documentation](https://pyside.github.io/docs/pyside/) - Documentation for PySide2. Since the QtPy API
 resembles PySide2, this documentation is helpful for looking up python Qt modules and classes that you may use.
 
+* [PyQtGraph](http://pyqtgraph.org/documentation/) -
+Documentation for the pyqtgraph package, which relies on Qt and provides basic data visualization (plotting) and
+various widgets (helpful for writing Xi-cam GUIPlugins).
+
