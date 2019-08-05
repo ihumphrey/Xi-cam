@@ -12,8 +12,9 @@ Welcome to Xi-cam's documentation!
    intro
    install
    ez-plugin
-   processing-plugin
    gui-plugin
+   processing-plugin
+   workflow
    plugin-dev
    resources
 
