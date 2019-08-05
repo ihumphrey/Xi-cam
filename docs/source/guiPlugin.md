@@ -164,60 +164,6 @@ cd Xi-cam.plugins.mydemo
 git init .
 ```
 
-### Creating the Plugin and the Plugin Marker File without cookiecutter
-
-We will create two files, *MovieEnhancePlugin.yapsy-plugin* and 
-*MovieEnhancePlugin.py*.
-
-*MovieEnhancePlugin.yapsy-plugin*:
-```
-[Core]
-Name = MovieEnhancePlugin
-Module = /path/to/MovieEnhancePlugin.py
-
-[Documentation]
-Author = My Name
-Version = 0.1.0
-Website = http://website.somedomain
-Description = Allows for movie-like image enhancements
-```
-
-*MovieEnhancePlugin.py*
-```python
-from qtpy.QtGui import QStandardItemModel
-from qtpy.QtCore import QItemSelectionModel
-from xicam.plugins import GUIPlugin, GUILayout
-from xicam.gui.widgets.tabview import TabView
-
-
-class MovieEnhancePlugin(GUIPlugin):
-    def __init__(self):
-        # Set up data model
-        self.headerModel = QStandardItemModel
-        self.selectionModel = QItemSelectionModel(self.headerModel)
-        
-        # Set up workflows
-        
-        # Set up widgets
-        self.examineView = TabView(self.headerModel,
-                                   widgetcls=,
-                                   selectionmodel=,
-                                   bindings=,
-                                   geometry=)
-        
-        enhanceWidget = QLabel('An enhance widget would eventually replace this label')
-        cropWidget = QLabel('A crop widget would eventually replace this label')
-        # Set up stages
-        self.stages = {
-            'Examine': GUILayout(self.examineView),
-            'Enhance': GUILayout(enhanceWidget),
-            'Crop': GUILayout(cropWidget)
-        }
-        
-        super(MovieEnhancePlugin, self).__init__(self)
-```
-)
-
 ### Installing the plugin
 
 After creating the plugin, we need to tell Xi-cam that it is available to use. One way to do this is to create an
