@@ -3,7 +3,7 @@
 The EZPlugin function provides a way to create a custom GUI plugin, although the 
 customization is somewhat limited. 
 
-*If you are interested in developing a more customizable GUI plugin, see [Creating a GUIPlugin](guiPlugin.md).*
+*If you are interested in developing a more customizable GUI plugin, see [Creating a GUIPlugin](gui-plugin.md).*
 
 ## Creating a Simple EZPlugin
 
