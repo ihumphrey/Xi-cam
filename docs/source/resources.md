@@ -54,7 +54,15 @@ plugin, make sure to use the `qtpy` modules when importing.
 concepts of Qt. *Note: this tutorial is written for PyQt5, remember to import from `qtpy` instead of `PyQt5` or 
 `PySide2` when writing code for Xi-cam.*
 
-* [PySide2 Documentation](https://pyside.github.io/docs/pyside/) - Documentation for PySide2. Since the QtPy API
+* [PySide2 Simple Clickable Button](https://wiki.qt.io/Qt_for_Python_Tutorial_ClickableButton) - 
+Short tutorial that describes the concept of signals and slots in Qt and shows how to create a button that
+responds to clicking.
+
+* [Pyside Documentation (Deprecated)](https://pyside.github.io/docs/pyside/index.html) -
+Although this is deprecated, the documentation for Qt classes is pretty good. The newer PySide2 documentation is not
+as complete as this documentation.
+
+* [PySide2 Documentation](https://doc.qt.io/qtforpython/) - Documentation for PySide2. Since the QtPy API
 resembles PySide2, this documentation is helpful for looking up python Qt modules and classes that you may use.
 
 * [PyQtGraph](http://pyqtgraph.org/documentation/) -
