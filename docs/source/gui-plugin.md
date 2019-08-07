@@ -86,15 +86,11 @@ DataHandlerPlugin.
  
 See [Creating a DataHandlerPlugin](data-handler.md) for more information.
 
-```TODO -- is there a way to easily see registered data handlers? (.hdf, .jpg, .bin, etc. are currently loadable)```
-
 ### GUIPlugin header methods
 
 Once data is ingested into Xi-cam, you will need a uniform way to access this internal data.
 The GUIPlugin class provides an interface for storing and accessing this data. You will need to override
 (i.e. implement your own version of) a few GUIPlugin methods in your own derived GUIPlugin class:
-
-```TODO -- hook in GUIPlugin documentation here...```
 
 **appendHeader** is *intended* to be used to internalize data in your derived GUIPlugin. You *must* override this
 method if you want to add ingested data (`NonDBHeader`) to your internal data model (`QStandardItemModel`).
@@ -213,7 +209,8 @@ cd Xi-cam.plugins.mydemo
 git init .
 ```
 
-Next, we can create a .gitignore. **TODO**
+You will then want to add a .gitignore file to tell what files git shouldn't look at.
+You can copy the .gitignore from the Xi-cam repository you cloned during installation.
 
 The repository is initialized, but we still need to tell git what files we want to add. To do this, we can add all of
 the non-ignored files by running `git add .`.
@@ -229,10 +226,6 @@ this repository with a README, .gitignore, or license (by default these will not
 GitHub will then give you some instructions with how to add files to the new repository. You will want to follow the
 steps under *push an existing repository from the command line* (it will show a `git remote` command and a
 `git push` command).
-
-* **TODO -- mention global git config?
-* **TODO -- git ssh keys?
-* **TODO -- add .gitignore to cookiecutter template (would be really useful, see Xi-cam's .gitignore for example file)
 
 #### Installing the plugin
 
@@ -261,49 +254,161 @@ functionality.
 ### Example 1 - A Cropping Plugin
 
 This example illustrates a simple GUIPlugin that can invert the values of an input image array.
+Here, *invert* will mean taking the difference between the max integer value and the image pixel values.
+For example, if we have an image that stores 8-bit unsigned data (values 0 to 255), we will subtract
+the pixel value from 255.
 
-First, we will need to create a ProcessingPlugin for our inversion process. We can add an Invert class to our *mydemo*
-package(*Xi-cam.plugins.mydemo/xicam/mydemo/__init__.py*).
+First, we will need to create a ProcessingPlugin for our inversion process.
+We can add an Invert class to our *mydemo* package(*Xi-cam.plugins.mydemo/xicam/mydemo/__init__.py*).
 
 Our Invert ProcessingPlugin needs to read in input data and output inverted data.
 We can define Inputs and an Output in our Invert class to handle those appropriately.
+We will also want to give this plugin a name and implement the evaluate method,
+which actually does the 'process' (the inversion).
 
 ```python
-import numpy as nd
+import numpy as np
 
 from xicam.plugins import ProcessingPlugin, Input, Output
 
 
 class Invert(ProcessingPlugin):
-    data = Input(description='Image array data to invert', type=nd.array)
-    inverted = Output(description='Inverted image data', type=nd.array)
+    name = 'Invert'
+
+    data = Input(description='Image array data to invert', type=np.ndarray)
+    inverted = Output(description='Inverted image data', type=np.ndarray)
 
     def evaluate(self):
-        self.inverted.value = ... # TODO -------------------------------
+        
+        invertVal = np.iinfo(self.data.value.dtype).max
+        self.inverted.value = invertVal - self.data.value
 ```
 
 Now that we have our Invert ProcessingPlugin implemented, we can begin to modify our GUIPlugin to communicate with it.
 Let's first think about what stages we might need and the layouts of these stages in our GUIPlugin.
 
-We can have one stage for now that represents the inversion itself:
+To get a quick implementation up and running, we can have one stage for now. This stage will have an image viewer widget
+as its center widget. We will also add a tool bar as the top widget. The tool bar will have a tool button that can run 
+the invert process when clicked. To do this, we will add a QAction to the tool bar using `QToolBar.addAction`. 
 
-```python
-# ...
-class mydemo(GUIPlugin):
-    # ...
-    def __init__(self):
-        # ...
-        self.imageViewer = DemoImageViewer()
-        self.stages = {
-            'Invert': GUILayout(self.imageViewer)    
-        }   
+When an action is added to the toolbar, it will be displayed as a clickable widget (button).
+In our case, this button will show the text *Invert* (when adding an action,
+there are multiple ways to parameterize what the created action will display).
+Adding an action also sets up the the triggered signal to the method (called a slot in Qt)
+that we pass to the `addAction` method.
+This means whenever the *Invert* button is clicked, an internal method (slot) will be called.
+
+In Qt, signals and slots allow widgets (or any Qt objects) to communicate with each other.
+Slots can be connected to (listen for) a signal.
+A *signal* is *emitted* from a widget, typically when the widget state changes in some way.
+A signal can be emitted without any slots being connected to it.
+When a slot is connected to a signal, the slot is executed anytime the connected signal is emitted.
+*For more information about Qt signals and slots,
+see the [Qt section](resources.md#qt) on the resources page.*
+
+Let's look at the `QToolBar.addAction(text, receiver)` ([ref](https://pyside.github.io/docs/pyside/PySide/QtGui/QToolBar.html?highlight=qtoolbar#PySide.QtGui.PySide.QtGui.QToolBar.addAction)):
+```
+PySide.QtGui.QToolBar.addAction(text, receiver)
+
+This is an overloaded function.
+
+Creates a new action with the given text . This action is added to the end of the toolbar. 
+The action’s PySide.QtGui.QAction.triggered() signal is connected to member in receiver .
 ```
 
+We will need to provide text for the action that is created as well as the receiver (slot) method.
+This method will be responsible for creating a Workflow, adding the InvertProcessPlugin to the Workflow,
+executing the Workflow, then calling a method to grab the results of the Workflow (the inverted data)
+and update the image.
 
-class DemoImageViewer(DynImageView):
-    pass
+For an input image, we will use on of Xi-cam's gui widgets, `DynImageView`, to display the image.
+We will use numpy to generate our input image. We will create a 128x128 size image with each row
+having values from 0 to 127.
+
+The completed example (with added comments) looks like:
+
+```python
+from qtpy.QtCore import *
+from qtpy.QtGui import *
+from qtpy.QtWidgets import *
+from qtpy import uic
+import pyqtgraph as pg
+
+import numpy as np
+
+from xicam.core import msg
+from xicam.core.execution import Workflow
+from xicam.gui.widgets.dynimageview import DynImageView
+from xicam.plugins import GUIPlugin, GUILayout, ProcessingPlugin, Input, Output
 
 
+class Invert(ProcessingPlugin):
+    # Define the plugin's name
+    name = 'Invert'
+
+    # Define inputs and outputs for the plugin
+    data = Input(description='Image array data to invert', type=np.ndarray)
+    inverted = Output(description='Inverted image data', type=np.ndarray)
+
+    # This method does the 'processing'
+    def evaluate(self):
+        # Find the max possible value of the data stored in our image
+        invertVal = np.iinfo(self.data.value.dtype).max
+        # Invert
+        self.inverted.value = invertVal - self.data.value
+
+
+class mydemo(GUIPlugin):
+    name = 'mydemo'
+
+    # insert GUI plugin generation
+
+    def __init__(self, *args, **kwargs):
+        # Create tool bar
+        self.toolBar = QToolBar()
+        # When the 'Invert' action is triggered, call self.doInvertWorkflow
+        self.toolBar.addAction('Invert', self.doInvertWorkflow)
+
+        # Create an initial 8-bit 128x128 image
+        self.imageViewer = DynImageView()
+        imageData = np.empty(shape=(128, 128), dtype=np.uint8)
+        imageData[:] = np.arange(imageData.shape[0])
+        self.imageViewer.setImage(imageData)
+
+        # Create the stages
+        self.stages = {
+            'Invert': GUILayout(self.imageViewer, top=self.toolBar)
+        }
+
+        super(mydemo, self).__init__(*args, **kwargs)
+
+    def doInvertWorkflow(self):
+        # Create a Workfow, add our Invert ProcessingPlugin to it
+        workflow = Workflow()
+        workflow.addProcess(Invert())
+        # Pass the first ProcessingPlugin's Inputs here:
+        # in our case, set the Invert ProcessingPlugin's 'data' Input.
+        # When the processes are finished (just Invert in our case),
+        # we can grab the results (Outputs) in the callback_slot.
+        workflow.execute(data=self.imageViewer.image,
+                         callback_slot=self.updateImageView)
+
+    def updateImageView(self, results):
+        # Our Workflow's results are ready, set our image to the inverted data
+        self.imageViewer.setImage(results['inverted'].value)
+```
+
+[//]: <> (TODO:
+DataHandler section
+  is there a way to easily see registered data handlers? e.g. .hdf, .jpg, .bin, etc. are currently loadable
+VCS section
+  mention global git config?
+  git ssh keys?
+  add .gitignore to cookiecutter template .would be really useful, see Xi-cam's .gitignore for example file
+Implementation section
+  WorkflowEditor
+  TabView
+)
 
 
 
