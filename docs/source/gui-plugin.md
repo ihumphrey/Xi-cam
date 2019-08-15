@@ -251,7 +251,7 @@ When you click it, you should see the text *Stage 1* in the middle of the main w
 After verifying that your plugin is loading in Xi-cam, we can begin to extend the GUIPlugin with custom
 functionality.
 
-### Example 1 - A Cropping Plugin
+### Example 1 - A Simple Image Processing Plugin
 
 This example illustrates a simple GUIPlugin that can invert the values of an input image array.
 Here, *invert* will mean taking the difference between the max integer value and the image pixel values.
