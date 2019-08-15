@@ -20,7 +20,7 @@ We will need to create a python file that will create this plugin.
 Create a new file, `SimpleEZPlugin.py` and add the following:
 
 ```python
-import xicam.plugins
+from xicam.plugins import EZPlugin
 
 SimpleEZPlugin = EZPlugin(name='SimpleEZPlugin')
 
@@ -67,9 +67,7 @@ The user_plugin_dir should look one of the following:
 
 * `~/.config/xicam/plugins` (Linux)
 * `/Users/username/Library/Caches/xicam/plugins` (macOS)
-* `C:\Users\username\AppData\Local\<AppAuthor>\xicam\plugins` (Windows)
-
-**TODO `<AppAuthor>` in windows**
+* `C:\Users\username\AppData\Local\xicam\xicam\plugins` (Windows)
 
 ### Writing a plugin marker file
 
@@ -108,8 +106,6 @@ python run_xicam.py
 Xi-cam will look through its plugin directories and it should find the
 `SimpleEZPlugin.yapsy-plugin` file. It will then attempt to load the 
 `SimpleEZPlugin`.
-
-![TODO: Screenshot?](file:///Users/ian/repos/Xi-cam.gui/xicam/gui/static/icons/cake.png)
 
 *Note: The message logger provided by Xi-cam can be useful for debugging 
 problems with plugin loading*
