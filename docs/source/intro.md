@@ -1,17 +1,23 @@
-# Xi-cam
+# Xi-CAM
 
-Xi-cam is a graphical user interface (GUI) application that facilitates synchrotron data processing
+Xi-CAM is a graphical user interface (GUI) application that facilitates synchrotron data processing
 and analysis. 
 
 ## Where to Start
 
-If you are interested in developing Xi-cam plugins, read through the
-[Install Guide](install.md) to set up Xi-cam for development on your machine.
+### Developing Xi-CAM Plugins
 
-Then, read the [GUI Plugin Guide](gui-plugin.md) to learn how to create a template GUIPlugin and
-how to extend its functionality. 
-You can also read the [ProcessingPlugin Guide](processing-plugin.md) to learn more about developing
-ProcessingPlugins, which are key to performing processes (operations, algorithms) on your data.
+Follow the installation instructions to set up Xi-CAM for development on your machine:
+
+* [Linux Installation](install-linux.md)
+* [macOS Installation](install-macos.md)
+* [Windows Installation](install-windows.md)
+
+Then, read the [GUI Plugin Guide](gui-plugin.md) to learn how to create a new GUI plugin
+inside of Xi-CAM.
+
+After creating a simple GUI plugin, see the [Operation Plugin Tutorial](operation-plugin.md)
+to learn about operations and how to create one.
 
 *Alternatively, for a quicker way to develop a plugin, you can read the [EZPlugin Guide](ez-plugin.md).
 Although creating plugins with this is simpler, it is much more limited in how you can customize the plugin.*
