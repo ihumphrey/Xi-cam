@@ -16,7 +16,7 @@ which will install the conda package manager, Anaconda, Anaconda Prompt, and Ana
 
 Open the Anaconda Prompt program.
 
-Then, create a new environment called **xicam** in your home directory.
+Then, create a new environment called **xicam**.
 This creates a sequestered space on your system to install xicam and its dependencies
 without modifying any of your system's libraries.
 
@@ -24,8 +24,7 @@ Next, activate the environment.
 This tells the system to use the libraries and applications inside the environment.
 
 ```bash
-cd ~
-conda create -n xicam
+conda create -n xicam python=3.7
 conda activate xicam
 ```
 
@@ -40,7 +39,7 @@ one of the python bindings for Qt (PyQt5 or PySide2) in order to run Xi-CAM.
 In your open Anaconda Prompt window, install the **pyqt** conda package as follows:
 
 ```bash
-conda install -c conda-forge pyqt
+conda install pyqt
 ```
 
 ## Install the Xi-CAM package
