@@ -1,7 +1,7 @@
-# Creating a GUIPlugin
+# GUIPlugin Documentation
 
-Xi-cam provides the GUIPlugin class for writing a Qt widget-based plugin.
-By deriving a GUIPlugin, you can define a custom plugin in Xi-cam that can
+Xi-CAM provides the GUIPlugin class for writing a Qt widget-based plugin.
+By deriving a GUIPlugin, you can define a custom plugin in Xi-CAM that can
 be used to load, process, and analyze data.
 
 See the
@@ -9,8 +9,8 @@ See the
 
 ## Prerequisites
 
-If you have not installed Xi-cam for development, follow the instructions on the 
-[Installing Xi-cam](install.md) page.
+If you have not installed Xi-CAM for development, follow the instructions on the 
+[Installing Xi-CAM](install.md) page.
 
 Also, *make sure that your xicam virtual environment (venv) is activated*. 
 
@@ -31,7 +31,7 @@ A GUIPlugin must have at least one stage.
 Stages are defined as as an ordered dictionary,
 where each key represents a stage's name and each associated value
 is a [GUILayout](#gui-layouts) that defines the organization of widgets for that stage.
-The key will be used at the stage's display name in Xi-cam.
+The key will be used at the stage's display name in Xi-CAM.
 
 As an example, we could have a Demo GUIPlugin that has the stages
 X and Y. To set these stages, we would set the
@@ -61,7 +61,7 @@ Enhance, Crop.)
 ### GUI Layouts
 
 The GUILayout class represents a layout of widgets to use in a GUIPlugin stage.
-The main window in Xi-cam is organized in a 3 x 3 grid. 
+The main window in Xi-CAM is organized in a 3 x 3 grid. 
 These cells in the grid are named according to their positions in the grid: 
 center, top, bottom, left, lefttop, leftbottom, right, righttop, rightbottom. 
 
@@ -76,19 +76,19 @@ it is not recommended as it will replace those main window widgets.
 ### Data Handlers
 
 If your plugin needs to load data and/or store internally processed data, the plugin will need a way to ingest
-the data into Xi-cam and then store data internally.
+the data into Xi-CAM and then store data internally.
 
 ### DataHandlerPlugin
 
-The DataHandlerPlugin class provides a mechanism to ingest data into Xi-cam. If you have a custom data format or the
-data you want to load is not currently a format Xi-cam can load, you will need to implement your own
+The DataHandlerPlugin class provides a mechanism to ingest data into Xi-CAM. If you have a custom data format or the
+data you want to load is not currently a format Xi-CAM can load, you will need to implement your own
 DataHandlerPlugin.
  
 See [Creating a DataHandlerPlugin](data-handler.md) for more information.
 
 ### GUIPlugin header methods
 
-Once data is ingested into Xi-cam, you will need a uniform way to access this internal data.
+Once data is ingested into Xi-CAM, you will need a uniform way to access this internal data.
 The GUIPlugin class provides an interface for storing and accessing this data. You will need to override
 (i.e. implement your own version of) a few GUIPlugin methods in your own derived GUIPlugin class:
 
@@ -105,7 +105,7 @@ attribute be created in your GUIPlugin class. This attribute is usually some typ
 
 ### Workflows
 
-In Xi-cam a `Workflow` represents a way to organize a set of processes (with inputs and outputs) and execute these 
+In Xi-CAM a `Workflow` represents a way to organize a set of processes (with inputs and outputs) and execute these 
 processes. Here, a process is a `ProcessingPlugin`. You will want to create a Workflow when you want to parameterize
 and perform processes (i.e. operations) on your data.
 
@@ -119,16 +119,16 @@ After reviewing the core concepts, we can start implementing our own GUIPlugin.
 We will create a simple GUIPlugin that allows viewing loaded images, then we
 will extend that plugin with more features until we have a MovieEnhance plugin.
 
-When first starting to write Xi-cam GUIPlugins, it is recommended to use a `cookiecutter`
+When first starting to write Xi-CAM GUIPlugins, it is recommended to use a `cookiecutter`
 template to set up some basic code and infrastructure for you.
 
 ### Using cookiecutter to Create the Plugin
 [cookiecutter](https://cookiecutter.readthedocs.io/en/latest/readme.html) is a tool for creating
 python projects from a template file.
 
-There is a Xi-cam GUIPlugin template for cookiecutter that helps set up some packaging infrastructure
+There is a Xi-CAM GUIPlugin template for cookiecutter that helps set up some packaging infrastructure
 and boiler-plate code for a GUIPlugin. Follow the instructions here:
-[Xi-cam.templates.GuiPlugin repo](https://github.com/synchrotrons/Xi-cam.templates.GuiPlugin).
+[Xi-CAM.templates.GuiPlugin repo](https://github.com/synchrotrons/Xi-CAM.templates.GuiPlugin).
 
 When cookiecutter is run with the GUIPlugin template file, it will prompt for some information
 that is used to create the package. Most of the prompts will have default values, indicated
@@ -138,7 +138,7 @@ Here are the prompts with descriptions and values that we will use:
 
 prompt | description | our value
 --- | --- | ---
-package_name     | name of the plugin package (also the name displayed in Xi-cam)     | mydemo
+package_name     | name of the plugin package (also the name displayed in Xi-CAM)     | mydemo
 display_name     | name of plugin (shows up in docs and README)                       | My Demo Plugin
 plugin_version   | current plugin version number                                      |
 plugin_file_name | file to put the generated plugin code into                         |
@@ -155,7 +155,7 @@ yapsy_ext        | file extension of the plugin marker file                     
 This generates the following in your current directory:
 
 ```
-Xi-cam.plugins.mydemo/
+Xi-CAM.plugins.mydemo/
   docs/
     ...
   LICENSE.md
@@ -173,7 +173,7 @@ Xi-cam.plugins.mydemo/
       mydemo.yapsy-plugin
 ```
 
-The plugin code will be located in *Xi-cam.plugins.mydemo/xicam/mydemo/__init__.py, which should look like:
+The plugin code will be located in *Xi-CAM.plugins.mydemo/xicam/mydemo/__init__.py, which should look like:
 
 ```python
 from qtpy.QtCore import *
@@ -201,16 +201,16 @@ class mydemo(GUIPlugin):
 
 *If you are familiar with VCS and git, continue to the next section.*
 
-You will need to initialize the directory cookiecutter created, `Xi-cam.plugins.mydemo`, 
+You will need to initialize the directory cookiecutter created, `Xi-CAM.plugins.mydemo`, 
 as a repository:
 
 ```
-cd Xi-cam.plugins.mydemo
+cd Xi-CAM.plugins.mydemo
 git init .
 ```
 
 You will then want to add a .gitignore file to tell what files git shouldn't look at.
-You can copy the .gitignore from the Xi-cam repository you cloned during installation.
+You can copy the .gitignore from the Xi-CAM repository you cloned during installation.
 
 The repository is initialized, but we still need to tell git what files we want to add. To do this, we can add all of
 the non-ignored files by running `git add .`.
@@ -229,26 +229,26 @@ steps under *push an existing repository from the command line* (it will show a 
 
 #### Installing the plugin
 
-After creating the plugin, we need to tell Xi-cam that it is available to use. One way to do this is to create an
-editable pip install. Make sure you are in your plugin's directory (Xi-cam.plugins.mydemo), then run:
+After creating the plugin, we need to tell Xi-CAM that it is available to use. One way to do this is to create an
+editable pip install. Make sure you are in your plugin's directory (Xi-CAM.plugins.mydemo), then run:
 
 ```
 pip install -e .
 ```
 
-This will allow Xi-cam to see your plugin and load it.
+This will allow Xi-CAM to see your plugin and load it.
 
 #### Verifying
 
 Run xicam to verify that your plugin loads properly.
-At the top-right of the Xi-cam main window, you should see *mydemo*.
+At the top-right of the Xi-CAM main window, you should see *mydemo*.
 When you click it, you should see the text *Stage 1* in the middle of the main window.
 
 ---
 
 ## Extending your GUIPlugin
 
-After verifying that your plugin is loading in Xi-cam, we can begin to extend the GUIPlugin with custom
+After verifying that your plugin is loading in Xi-CAM, we can begin to extend the GUIPlugin with custom
 functionality.
 
 ### Example 1 - A Inverting Plugin
@@ -259,7 +259,7 @@ For example, if we have an image that stores 8-bit unsigned data (values 0 to 25
 the pixel value from 255.
 
 First, we will need to create a ProcessingPlugin for our inversion process.
-We can add an Invert class to our *mydemo* package(*Xi-cam.plugins.mydemo/xicam/mydemo/__init__.py*).
+We can add an Invert class to our *mydemo* package(*Xi-CAM.plugins.mydemo/xicam/mydemo/__init__.py*).
 
 Our Invert ProcessingPlugin needs to read in input data and output inverted data.
 We can define Inputs and an Output in our Invert class to handle those appropriately.
@@ -320,7 +320,7 @@ We will need to provide text for the action that is created as well as the recei
 This method will be responsible for executing the Workflow, then calling a method to grab the results of the Workflow (the inverted data)
 and update the image.
 
-For an input image, we will use one of Xi-cam's gui widgets, `DynImageView`, to display the image.
+For an input image, we will use one of Xi-CAM's gui widgets, `DynImageView`, to display the image.
 We will use numpy to generate our input image. We will create a 128x128 size image with each row
 having values from 0 to 127.
 
@@ -404,7 +404,7 @@ DataHandler section
 VCS section
   mention global git config?
   git ssh keys?
-  add .gitignore to cookiecutter template .would be really useful, see Xi-cam's .gitignore for example file
+  add .gitignore to cookiecutter template .would be really useful, see Xi-CAM's .gitignore for example file
 Implementation section
   WorkflowEditor
   TabView
