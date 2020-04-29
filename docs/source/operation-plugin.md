@@ -16,7 +16,13 @@ inputs, outputs, descriptions of inputs/outputs, units, etc.
 
 To achieve this, The OperationClass makes extensive use of Python decorators.
 
-## What Does an OperationPlugin Look Like?
+### Where Is OperationPlugin?
+
+```python
+xicam.plugins.operationplugin
+```
+
+### What Does an OperationPlugin Look Like?
 
 Let's start off with a simple function that computes the square of its input:
 
@@ -177,9 +183,8 @@ More information about `Workflow` can be found in the [Workflow Documentation](w
 ## API Documentation
 
 ```eval_rst
-.. automodule:: xicam.plugins
-   :noindex:
-.. autoclass:: OperationPlugin
+.. automodule:: xicam.plugins.operationplugin
+    :members:
 ```
 
 ## See Also
