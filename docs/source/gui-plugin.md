@@ -1,11 +1,157 @@
+TODO: 
+Use cookiecutter here to have uniform starting point for plugin creation
+
 # GUIPlugin Documentation
 
-Xi-CAM provides the GUIPlugin class for writing a Qt widget-based plugin.
-By deriving a GUIPlugin, you can define a custom plugin in Xi-CAM that can
-be used to load, process, and analyze data.
+This documentation provides information on GUIPlugins and GUILayouts
+to help with designing your own plugins for Xi-CAM.
+API reference documentation is also included at the bottom.
 
+*If you are new to developing Xi-CAM plugins,
+it is recommended that you follow the [QuickStart Guide](quickstart.md) first.*
+
+## What Is A GUIPlugin?
+
+A GUIPlugin is an interactive user-facing plugin in Xi-CAM.
+It can be used to visualize and analyze data.
+
+GUIPlugins make use of the `qtpy` Python package for interactive GUI components.
 See the
 [Resources](resources.md) page for more information about Qt and QtPy.
+
+### Where is GUIPlugin?
+
+```python
+xicam.plugins.guiplugin
+```
+
+### What Does a GUIPlugin Look Like?
+
+First, let's look at what Xi-CAM looks like when you first load it:
+
+```eval_rst
+.. figure:: _static/xicam-main.png
+  :alt: Main window of Xi-CAM on startup, with three installed plugins.
+
+Main window of Xi-CAM when running xicam.
+Note that there are three installed `GUIPlugins` here;
+if you haven't installed any plugins, you won't any listed.
+```
+
+As you can see, the main window of Xi-CAM after it has finished loading
+shows any installed GUIPlugins, a citation / references widget, a preview widget,
+and a data browser widget.
+The data browser widget can be used to load data into a `GUIPlugin`.
+The data preview widget can be used to "preview" data before loading it.
+
+It is important to keep in mind a few concepts for GUIPlugins:
+* A `GUIPlugin` can have one or more `stages`.
+* Each `stage` is defined with a `GUILayout`.
+* A `GUILayout` is defined with a widget (or multiple widgets).
+
+These concepts are explored in more detail later in this document.
+
+#### Selecting and Activating a GUIPlugin
+
+We can activate any of the installed GUIPlugins by clicking on their name at the top.
+Let's click on "Example Plugin":
+
+```eval_rst
+.. figure:: _static/xicam-example-plugin.png
+  :alt: Xi-CAM Example Plugin
+
+  The Example Plugin's interface.
+  Note that this plugin doesn't do much yet; it simply displays the text "Stage 1..."
+```
+
+#### How is Example Plugin Implemented?
+
+The code for the "Example Plugin" shown above looks like this:
+
+```python
+from qtpy.QtWidgets import QLabel
+
+from xicam.plugins import GUILayout, GUIPlugin
+
+
+class ExamplePlugin(GUIPlugin):
+    # Define the name of the plugin (how it is displayed in Xi-CAM)
+    name = "Example Plugin"
+
+    def __init__(self, *args, **kwargs):
+        # Insert code here
+
+        # Modify stages here
+        self.stages = {'Stage 1': GUILayout(QLabel("Stage 1..."))}
+
+        super(ExamplePlugin, self).__init__(*args, **kwargs)
+```
+
+We create our own derived version of `GUIPlugin`, which we call `ExamplePlugin`.
+We then give it a name to tell Xi-CAM how to display it in the top bar of the main window.
+In this case, we give it the name "Example Plugin."
+
+We then define our `__init__` method to describe how to create an `ExamplePlugin`.
+Notice that we are adding a `QLabel`, which is simply text, to a `GUILayout`.
+We then add the `GUILayout` to "Stage 1" to define the GUIPlugin's stages.
+
+### What Is a Stage?
+
+Visually, a stage is a stand-alone interface for a `GUIPlugin`.
+A `GUIPlugin` must have at least one stage but may have multiple stages.
+With multiple stages, each stage has its own interface
+and each stage can be selected in the top bar of Xi-CAM.
+
+Stages for a `GUIPlugin` are accessible with ```self.stages```.
+```self.stages``` is a dictionary where each
+* key is the name of the stage
+* value is a `GUILayout`s
+
+For example, we might define two stages as:
+
+```python
+self.stages = {"A": GUILayout(QLabel("1")),
+               "B": GUILayout(QLabel("2"))}
+```
+
+This will look like:
+
+```eval_rst
+.. figure:: _static/xicam-example-plugin-stages.png
+  :alt: Example Plugin with multiple stages
+
+The interface of a plugin named "Example Plugin" with multiple stages, "A" and "B".
+Note that "A" is currently selected, so we see the label "1" in the middle of the window.
+```
+
+### What Is a GUILayout?
+
+A `GUILayout` is a layout used to describe how widgets should be organized in a stage in a GUIPlugin.
+
+```eval_rst
+.. figure:: _static/xicam-layout.png
+  :alt: Layout of Xi-CAM, corresponding to a GUILayout.
+```
+
+The layout corresponds to a 3x3 grid in the Xi-CAM main window, with the names
+center, left, right, lefttop, righttop, leftbottom, rightbottom.
+These names correspond to the arguments you can pass when creating a `GUILayout`.
+
+You **must** provide at least one widget, which will be the center widget.
+
+
+### What Is a QLabel?
+
+`QLabel` is a Qt widget provided by the Qt backend Xi-CAM makes use of.
+It acts a widget that holds simple text.
+
+For more information on Qt, see [Qt for Python Documentation](https://doc.qt.io/qtforpython/).
+
+
+
+
+
+#### Entry Point
 
 ## Prerequisites
 
