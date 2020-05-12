@@ -137,10 +137,10 @@ class WorkflowWidget(QWidget):
             # TODO : should OperationPlugin be responsible for initializing categories
             # to some placeholder value (instead of [])?
             if typeOfOperationPlugin == []:
-                typeOfOperationPlugin = "uncategorized"  # put found operations into a default category
-            if not typeOfOperationPlugin in sortingDict.keys():
-                sortingDict[typeOfOperationPlugin] = []
-            sortingDict[typeOfOperationPlugin].append(plugin)
+                typeOfOperationPlugin = ["uncategorized"]  # put found operations into a default category
+            if not typeOfOperationPlugin[0] in sortingDict.keys():
+                sortingDict[typeOfOperationPlugin[0]] = []
+            sortingDict[typeOfOperationPlugin[0]].append(plugin)
         for key in sortingDict.keys():
             self.functionmenu.addSeparator()
             self.functionmenu.addAction(key)
